@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from app.endpoints.study_plan_router import router as study_plan_router
 from app.database import create_tables
+from prometheus_fastapi_instrumentator import Instrumentator
+
 
 app = FastAPI(
     title="Study Plan Service API",
@@ -9,6 +11,9 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc"
 )
+
+instrumentator = Instrumentator()
+instrumentator.instrument(app).expose(app)
 
 @app.on_event("startup")
 def startup():
